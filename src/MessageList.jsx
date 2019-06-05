@@ -1,32 +1,26 @@
 import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import Message from './Message.jsx';
 
 export default class MessageList extends Component {
-    
+
     
     render() {
-    const messageItems = this.props.messages.map((message, id) => {
+    const messageItems = this.props.messages.map((message) => {
         return (
-            <li className="message-content" defaultValue={this.props.currentUser}  key={id}>{message.content}</li>
+            <Message key={message.id} currentUser={message.username} content={message.content}/>
         );
     });
 
       return (
-        <main className="messages" defaultValue={this.props.messages}>
-            <div className="message">
+        <main className="messages">
                 <ul>{messageItems}</ul>
-            </div>
+                
         </main>
       );
   }
-//    messageItems.propTypes = {
-//     messages: PropTypes.array,
-//   }; 
 }
 
-  
-
-  
-
-  
-
+MessageList.propTypes = {
+    messages: PropTypes.array,
+  }; 

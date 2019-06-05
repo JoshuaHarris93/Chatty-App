@@ -24,7 +24,7 @@ export default class App extends Component {
     super(props);
     
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
           username: "Bob",
@@ -39,6 +39,15 @@ export default class App extends Component {
       ]
     }
   }
+
+  addNewMessage = input => {
+    const newMessage = {
+      username: this.state.currentUser.name,
+      content: input,
+      id: '123'
+    }
+    this.setState({ messages: [...this.state.messages, newMessage] });
+  };
 
   componentDidMount() {
     console.log("componentDidMount <App />");
@@ -58,7 +67,7 @@ export default class App extends Component {
     <div>
       <NavBar />
       <MessageList messages={this.state.messages}/>
-      <ChatBar currentUser={this.state.currentUser}/>
+      <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage}/>
 
     </div>
     );
