@@ -27,15 +27,13 @@ const wss = new SocketServer({ server });
       console.log("Client connected");
       
     ws.on("message", function incoming(message) {
-    const messageObject = JSON.parse(message);
-    messageObject.id = uuidv4();
-    if (messageObject.type === "outgoingMessage") {
-      messageObject.type = "incomingMessage";
-    }
-    const username = messageObject.username;
-    const content = messageObject.content;
+        const messageObject = JSON.parse(message);
+        messageObject.id = uuidv4();
+    console.log(message)
+        if (messageObject.type === "postMessage") {
+            messageObject.type = "incomingMessage";
+        }
 
-    console.log("User", username, "said", content, "id", messageObject.id);
     wss.broadcast(JSON.stringify(messageObject));
   });
 
