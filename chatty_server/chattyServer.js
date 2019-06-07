@@ -33,28 +33,37 @@ function getRandomColor() {
   return color;
 }
 
-// updates the user count based on the number of clients with open ws channels (connections)
+// updates the user count based on the number of currently connected clients
 function updateUserCount() {
   const onlineUsers = {
     clients: wss.clients.size,
-    type: "incomingUserCount",
-    color: getRandomColor()
+    type: "incomingUserCount"
   };
 
   wss.broadcast(JSON.stringify(onlineUsers));
 }
 
+// assigns users a number on connection (anon1, anon2) 
+function clientNum() {
+    const clientInfo = {
+        clients: wss.clients.size,
+        color: getRandomColor()
+    }
+    wss.broadcast(JSON.stringify(clientInfo))
+}
+
+
 // on.connection runs immediately when client connect
 wss.on("connection", function connection(ws) {
   console.log("Client connected");
-
+  
+  clientNum();
   updateUserCount();
-// on.message runs immediately when message is sent (on 'Enter')
+  // on.message function broadcasts message to users when message is sent (on 'Enter')
   ws.on("message", function incoming(message) {
     const messageObject = JSON.parse(message);
 
     messageObject.id = uuidv4();
-    console.log(message);
     if (messageObject.type === "postMessage") {
       messageObject.type = "incomingMessage";
     }

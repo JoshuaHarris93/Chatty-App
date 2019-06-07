@@ -50,23 +50,28 @@ export default class App extends Component {
 
     this.socketServer.onopen = event => {
       console.log("connected to: socketServer");
+     
     };
 
     this.socketServer.onmessage = event => {
       let data = JSON.parse(event.data);
+      // this.setState({
+      //     clients: client.wss.size,
+      //     color: this.state.currentUser.color,
+      //     id: data.id
+      // })
 
       if (data.type === "incomingUserCount") {
         this.setState({
           onlineUsers: data.clients,
           currentUser: {
-            name: this.state.currentUser.name,
+            name: this.state.currentUser.name ? this.state.currentUser.name : "anonymous " + data.clients,
             color: data.color,
             id: data.id
           }
         });
       } else {
-        this.setState({ messages: [...this.state.messages, data] });
-        console.log(data);
+        this.setState({ messages: [...this.state.messages, data], clientPosition: this.state.color});
       }
     };
   }

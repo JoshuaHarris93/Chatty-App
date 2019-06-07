@@ -9,6 +9,7 @@ export default class Message extends Component {
           <span
             style={{ color: this.props.color }}
             className="message-username"
+            // clientPosition={id: this.props.id}
           >
             {this.props.currentUser.name}
           </span>
