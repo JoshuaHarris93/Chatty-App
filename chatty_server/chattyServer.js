@@ -24,10 +24,11 @@ wss.broadcast = function broadcast(message) {
 };
 
 // Random color generator
-function getRandomColor() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
+function getRandomColor(str) {
+  let letters = "0123456789ABCDEF";
+  let color = "#";
+  
+  for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
@@ -57,13 +58,14 @@ function clientNum() {
 wss.on("connection", function connection(ws) {
   console.log("Client connected");
   
-  clientNum();
   updateUserCount();
   // on.message function broadcasts message to users when message is sent (on 'Enter')
   ws.on("message", function incoming(message) {
     const messageObject = JSON.parse(message);
 
     messageObject.id = uuidv4();
+    messageObject.color = getRandomColor(message.username);
+
     if (messageObject.type === "postMessage") {
       messageObject.type = "incomingMessage";
     }
