@@ -16,42 +16,55 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
-// wss.on("connection", ws => {
-  wss.broadcast = function broadcast(message) {
-    wss.clients.forEach(function each(client) {
-      client.send(message);
-    });
+// Create the function that allows broadcasting to multiple users simultaneously
+wss.broadcast = function broadcast(message) {
+  wss.clients.forEach(function each(client) {
+    client.send(message);
+  });
+};
+
+// Random color generator
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// updates the user count based on the number of clients with open ws channels (connections)
+function updateUserCount() {
+  const onlineUsers = {
+    clients: wss.clients.size,
+    type: "incomingUserCount",
+    color: getRandomColor()
   };
 
-  function updateUserCount() {
-    const onlineUsers = {
-        clients: wss.clients.size,
-        type: 'incomingUserCount'
+  wss.broadcast(JSON.stringify(onlineUsers));
+}
+
+// on.connection runs immediately when client connect
+wss.on("connection", function connection(ws) {
+  console.log("Client connected");
+
+  updateUserCount();
+// on.message runs immediately when message is sent (on 'Enter')
+  ws.on("message", function incoming(message) {
+    const messageObject = JSON.parse(message);
+
+    messageObject.id = uuidv4();
+    console.log(message);
+    if (messageObject.type === "postMessage") {
+      messageObject.type = "incomingMessage";
     }
-
-    wss.broadcast(JSON.stringify(onlineUsers))
-  };
-
-  wss.on("connection", function connection(ws) {
-      console.log("Client connected");
-
-      updateUserCount()
-
-    ws.on("message", function incoming(message) {
-        const messageObject = JSON.parse(message);
-        messageObject.id = uuidv4();
-    console.log(message)
-        if (messageObject.type === "postMessage") {
-            messageObject.type = "incomingMessage";
-        }
 
     wss.broadcast(JSON.stringify(messageObject));
   });
 
-
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on("close", () => {
-      console.log("Client disconnected");
-      updateUserCount()
-    });
+    console.log("Client disconnected");
+    updateUserCount();
+  });
 });
