@@ -52,9 +52,6 @@ export default class App extends Component {
       console.log("connected to: socketServer");
       this.setState({
         currentUser: {
-          name: this.state.currentUser.name
-            ? this.state.currentUser.name
-            : "anonymous " + data.clients,
           color: data.color,
           id: data.id
       }})
@@ -65,8 +62,12 @@ export default class App extends Component {
 
       if (data.type === "incomingUserCount") {
         this.setState({
-          onlineUsers: data.clients
-         
+          onlineUsers: data.clients,
+          currentUser: {
+          name: this.state.currentUser.name
+            ? this.state.currentUser.name
+            : "anonymous " + data.clients
+            }
           }
         );
       } else {
