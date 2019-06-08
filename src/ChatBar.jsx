@@ -11,6 +11,7 @@ export default class ChatBar extends Component {
     };
   }
 
+  // Event handlers targeting the two chatbar text inputs
   handleChange = event => {
     this.setState({ content: event.target.value });
   };

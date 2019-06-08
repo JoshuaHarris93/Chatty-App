@@ -4,11 +4,11 @@ import Message from "./Message.jsx";
 import NavBar from "./Nav.jsx";
 import MessageList from "./MessageList.jsx";
 
-// Highest level component 
+// Highest level component
 export default class App extends Component {
   constructor(props) {
     super(props);
-//set initial state
+    //set initial state
     this.state = {
       currentUser: {
         name: "",
@@ -44,13 +44,20 @@ export default class App extends Component {
     });
   };
 
-// Mounting all data (like $(document.ready) in jQuery)
+  // Mounting all data (like $(document.ready) in jQuery)
   componentDidMount() {
     this.socketServer = new WebSocket("ws://localhost:3001/");
 
     this.socketServer.onopen = event => {
       console.log("connected to: socketServer");
-     
+      this.setState({
+        currentUser: {
+          name: this.state.currentUser.name
+            ? this.state.currentUser.name
+            : "anonymous " + data.clients,
+          color: data.color,
+          id: data.id
+      }})
     };
 
     this.socketServer.onmessage = event => {
@@ -58,19 +65,19 @@ export default class App extends Component {
 
       if (data.type === "incomingUserCount") {
         this.setState({
-          onlineUsers: data.clients,
-          currentUser: {
-            name: this.state.currentUser.name ? this.state.currentUser.name : "anonymous " + data.clients,
-            color: data.color,
-            id: data.id
+          onlineUsers: data.clients
+         
           }
-        });
+        );
       } else {
-        this.setState({ messages: [...this.state.messages, data], clientPosition: this.state.color});
+        this.setState({
+          messages: [...this.state.messages, data],
+          clientPosition: this.state.color
+        });
       }
     };
   }
-// render all child components
+  // render all child components
   render() {
     return (
       <div>

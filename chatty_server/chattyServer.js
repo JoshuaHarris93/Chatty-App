@@ -27,9 +27,9 @@ wss.broadcast = function broadcast(message) {
 function getRandomColor(str) {
   let letters = "0123456789ABCDEF";
   let color = "#";
-    // if (str !== ) {
-    //     re
-    // }
+  // if (str !== ) {
+  //     re
+  // }
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
@@ -46,27 +46,26 @@ function updateUserCount() {
   wss.broadcast(JSON.stringify(onlineUsers));
 }
 
-// assigns users a number on connection (anon1, anon2) 
+// assigns users a number on connection (anon1, anon2)
 function clientNum() {
-    const clientInfo = {
-        clients: wss.clients.size,
-        color: getRandomColor()
-    }
-    wss.broadcast(JSON.stringify(clientInfo))
+  const clientInfo = {
+    clients: wss.clients.size,
+    color: getRandomColor()
+  };
+  wss.broadcast(JSON.stringify(clientInfo));
 }
-
 
 // on.connection runs immediately when client connect
 wss.on("connection", function connection(ws) {
   console.log("Client connected");
-  
+  const color = getRandomColor();
   updateUserCount();
   // on.message function broadcasts message to users when message is sent (on 'Enter')
   ws.on("message", function incoming(message) {
     const messageObject = JSON.parse(message);
 
     messageObject.id = uuidv4();
-    messageObject.color = getRandomColor(message.username);
+    messageObject.color = color;
 
     if (messageObject.type === "postMessage") {
       messageObject.type = "incomingMessage";
