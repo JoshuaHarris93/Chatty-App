@@ -27,7 +27,9 @@ wss.broadcast = function broadcast(message) {
 function getRandomColor(str) {
   let letters = "0123456789ABCDEF";
   let color = "#";
-  
+    // if (str !== ) {
+    //     re
+    // }
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }

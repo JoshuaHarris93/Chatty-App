@@ -55,11 +55,6 @@ export default class App extends Component {
 
     this.socketServer.onmessage = event => {
       let data = JSON.parse(event.data);
-      // this.setState({
-      //     clients: client.wss.size,
-      //     color: this.state.currentUser.color,
-      //     id: data.id
-      // })
 
       if (data.type === "incomingUserCount") {
         this.setState({
