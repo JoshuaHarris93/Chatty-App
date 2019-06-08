@@ -25,4 +25,4 @@ open http://localhost:3000
 
 ### Video 
 
-[![Chatty App video] (https://youtu.be/hDzG9Ml7-Dc)]
+Chatty App video: https://youtu.be/hDzG9Ml7-Dc
